@@ -16,3 +16,23 @@
   text-decoration: underline;
   color: #000;
 }
+
+.btn-like {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-like:hover {
+  background: #f8f9fa;
+}

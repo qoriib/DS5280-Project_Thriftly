@@ -1,6 +1,7 @@
 import "./Home.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
+import { Heart, ShoppingCart } from "react-feather";
 import Hero from "../components/Hero";
 
 const productsData = [
@@ -75,6 +76,27 @@ const filterOptions = [
 
 function Home() {
   const [filter, setFilter] = useState(null);
+  const [liked, setLiked] = useState([]); // simpan id produk yang di-like
+  const [cart, setCart] = useState([]);
+
+  const toggleLike = (id) => {
+    setLiked((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const addToCart = (item) => {
+    setCart((prev) => {
+      const exists = prev.find((x) => x.id === item.id);
+      if (exists) {
+        // tambah qty jika sudah ada
+        return prev.map((x) =>
+          x.id === item.id ? { ...x, qty: x.qty + 1 } : x
+        );
+      }
+      return [...prev, { ...item, qty: 1 }];
+    });
+  };
 
   const filteredProducts = filter
     ? productsData.filter(
@@ -121,21 +143,47 @@ function Home() {
       <div className="container">
         <div className="row g-5">
           {filteredProducts.map((item) => (
-            <div className="col-md-4 text-center" key={item.id}>
-              <img src={item.img} alt={item.name} className="img-fluid mb-3" />
-              <div className="tag">NEW IN</div>
-              <h6 className="fw-bold">{item.name}</h6>
-              <p className="text-muted small">{item.desc}</p>
-              <p className="fw-bold">
-                {item.price.toLocaleString("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                  minimumFractionDigits: 0
-                })}
-              </p>
-              <p className="text-muted small">
-                {item.material} | {item.color} | {item.size}
-              </p>
+            <div className="col-md-4" key={item.id}>
+              <div className="position-relative text-center">
+                {/* Floating like button */}
+                <button
+                  className="btn-like"
+                  onClick={() => toggleLike(item.id)}
+                >
+                  <Heart
+                    size={18}
+                    fill={liked.includes(item.id) ? "red" : "none"}
+                    color={liked.includes(item.id) ? "red" : "black"}
+                  />
+                </button>
+
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="img-fluid mb-3"
+                />
+                <div className="tag">NEW IN</div>
+                <h6 className="fw-bold">{item.name}</h6>
+                <p className="text-muted small">{item.desc}</p>
+                <p className="fw-bold">
+                  {item.price.toLocaleString("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    minimumFractionDigits: 0,
+                  })}
+                </p>
+                <p className="text-muted small">
+                  {item.material} | {item.color} | {item.size}
+                </p>
+                <div className="mt-auto">
+                  <button
+                    className="btn btn-dark w-100 d-flex align-items-center justify-content-center gap-2"
+                    onClick={() => addToCart(item)}
+                  >
+                    <ShoppingCart size={16} /> Add to Cart
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
