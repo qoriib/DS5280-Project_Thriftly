@@ -1,0 +1,18 @@
+.filter-link {
+  background: none;
+  border: none;
+  color: #000;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 0;
+}
+
+.filter-link:hover {
+  text-decoration: underline;
+}
+
+.filter-link.active {
+  font-weight: 500;
+  text-decoration: underline;
+  color: #000;
+}
